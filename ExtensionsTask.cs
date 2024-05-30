@@ -28,13 +28,13 @@ public static class ExtensionsTask
 	/// </returns>
 	public static IEnumerable<(T First, T Second)> Bigrams<T>(this IEnumerable<T> items)
 	{
-		Queue<T> queue = new Queue<T>();
+		Queue<T> itemsQueue = new Queue<T>();
 		foreach (var item in items)
 		{
-			queue.Enqueue(item);
-			if (queue.Count > 1)
+			itemsQueue.Enqueue(item);
+			if (itemsQueue.Count > 1)
 			{
-				yield return new ValueTuple<T, T>(queue.Dequeue(), item);
+				yield return new ValueTuple<T, T>(itemsQueue.Dequeue(), item);
             }
 		}
 	}

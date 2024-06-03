@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using NUnit.Framework;
 
@@ -72,4 +73,16 @@ public class StatisticsTests
 		var median = StatisticsTask.GetMedianTimePerSlide(visits, SlideType.Exercise);
 		Assert.AreEqual(2, median, 1e-5);
 	}
+
+    [Test]
+    public void TestOnRealFiles()
+    {
+        var separators = new char[] { '\r', '\n' };
+        var visits = File.ReadAllText("visits.txt").Split(separators, StringSplitOptions.RemoveEmptyEntries);
+        var slides = File.ReadAllText("slides.txt").Split(separators, StringSplitOptions.RemoveEmptyEntries);
+        var parsedSlides = ParsingTask.ParseSlideRecords(slides);
+        var parsedVisits = ParsingTask.ParseVisitRecords(visits, parsedSlides);
+        var median = StatisticsTask.GetMedianTimePerSlide(parsedVisits.ToList(), SlideType.Exercise);
+        Assert.AreEqual(8.3333333333333339d, median, 1e-5);
+    }
 }
